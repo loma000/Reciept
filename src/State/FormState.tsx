@@ -23,7 +23,7 @@ const defaultData:ReceiptData =   {
         electricMeterPrev: "0",
         electricMeterUsed: "0",
         items: {
-          rent: { checked: false, amount: "0" },
+          rent: { checked: true, amount: "5000" },
           water: { checked: false, amount: "0" },
           electric: { checked: false, amount: "0" },
           internet: { checked: false, amount: "0" },
@@ -53,7 +53,7 @@ export const useFormStore = create<FormStateProp>()(
         electricMeterPrev: "0",
         electricMeterUsed: "0",
         items: {
-          rent: { checked: false, amount: "0" },
+          rent: { checked: true, amount: "5000" },
           water: { checked: false, amount: "0" },
           electric: { checked: false, amount: "0" },
           internet: { checked: false, amount: "0" },

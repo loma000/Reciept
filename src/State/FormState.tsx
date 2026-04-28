@@ -39,32 +39,7 @@ const defaultData:ReceiptData =   {
 export const useFormStore = create<FormStateProp>()(
   persist(
     (set) => ({
-      Form: {
-        name: "",
-        address: "",
-        tel: "",
-        date: "",
-        room: "",
-        month: "",
-        waterMeterCurr: "0",
-        waterMeterPrev: "0",
-        waterMeterUsed: "0",
-        electricMeterCurr: "0",
-        electricMeterPrev: "0",
-        electricMeterUsed: "0",
-        items: {
-          rent: { checked: true, amount: "5000" },
-          water: { checked: false, amount: "0" },
-          electric: { checked: false, amount: "0" },
-          internet: { checked: false, amount: "0" },
-          fee: { checked: false, amount: "0" },
-          other: { checked: false, amount: "0" },
-        },
-        Receiver: "",
-        bankName: "",
-        accountName: "",
-        accountNumber: "",
-      },
+      Form: defaultData,
       setData: (data) => set((state) => ({ Form: { ...state.Form, ...data } })),
       setItems: (data) =>
         set((state) => ({

@@ -4,13 +4,14 @@ import "./index.css";
 import "@mantine/core/styles.css";
 import "@mantine/dates/styles.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import PDFLoader from "./PDFLoaderPage.tsx";
+
 import { MantineProvider } from "@mantine/core";
-import { Form } from "./FormPage.tsx";
+
+import { ReceiptListPage } from "./RecieptListPage.tsx";
 
 const router = createBrowserRouter([
-  { path: "/", element: <Form /> },
-  { path: "/PDF", element: <PDFLoader /> },
+  { path: "/", element: <ReceiptListPage /> }
+,
 ]);
 
 createRoot(document.getElementById("root")!).render(

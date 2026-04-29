@@ -18,9 +18,11 @@ export interface ItemDef {
 }
 
 export interface ReceiptData {
+  id?:number;
   name?: string;
   address?: string;
   tel?: string;
+  dateRealFormat?:string;
   date?: string;
   room?: string;
   month?: string;
@@ -51,3 +53,4 @@ export const THAI_MONTHS_FULL = [
   "พฤศจิกายน",
   "ธันวาคม",
 ];
+

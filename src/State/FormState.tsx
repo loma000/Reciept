@@ -6,35 +6,37 @@ interface FormStateProp {
   Form: ReceiptData;
   setData: (data: Partial<ReceiptData>) => void;
   setItems: (data: Partial<Record<ItemKey, ItemEntry>>) => void;
-  resetData:()=>void;
+  resetData: () => void;
 }
 
-const defaultData:ReceiptData =   {
-        name: "",
-        address: "",
-        tel: "",
-        date: "",
-        room: "",
-        month: "",
-        waterMeterCurr: "0",
-        waterMeterPrev: "0",
-        waterMeterUsed: "0",
-        electricMeterCurr: "0",
-        electricMeterPrev: "0",
-        electricMeterUsed: "0",
-        items: {
-          rent: { checked: true, amount: "5000" },
-          water: { checked: false, amount: "0" },
-          electric: { checked: false, amount: "0" },
-          internet: { checked: false, amount: "0" },
-          fee: { checked: false, amount: "0" },
-          other: { checked: false, amount: "0" },
-        },
-        Receiver: "",
-        bankName: "",
-        accountName: "",
-        accountNumber: "",
-      }
+const defaultData: ReceiptData = {
+  id: 0,
+  name: "",
+  address: "",
+  tel: "",
+  dateRealFormat:"",
+  date: "",
+  room: "",
+  month: "",
+  waterMeterCurr: "0",
+  waterMeterPrev: "0",
+  waterMeterUsed: "0",
+  electricMeterCurr: "0",
+  electricMeterPrev: "0",
+  electricMeterUsed: "0",
+  items: {
+    rent: { checked: true, amount: "5000" },
+    water: { checked: false, amount: "0" },
+    electric: { checked: false, amount: "0" },
+    internet: { checked: false, amount: "0" },
+    fee: { checked: false, amount: "0" },
+    other: { checked: false, amount: "0" },
+  },
+  Receiver: "",
+  bankName: "",
+  accountName: "",
+  accountNumber: "",
+};
 
 export const useFormStore = create<FormStateProp>()(
   persist(
@@ -44,7 +46,8 @@ export const useFormStore = create<FormStateProp>()(
       setItems: (data) =>
         set((state) => ({
           Form: { ...state.Form, items: { ...state.Form.items, ...data } },
-        })),resetData:()=>set({Form:defaultData})
+        })),
+      resetData: () => set({ Form: defaultData }),
     }),
     {
       name: "endgame",

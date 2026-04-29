@@ -15,15 +15,11 @@ import {
 import * as XLSX from "xlsx";
 type Style = ReturnType<typeof StyleSheet.create>[string];
 
- 
-import NotoSansRegular from "./assets/fonts/NotoSansThai-Regular.ttf";
-import NotoSansBold from "./assets/fonts/NotoSansThai-Bold.ttf";
-import type { ItemDef, ItemKey, ReceiptData } from "./Props/Data";
- 
-import { useFormStore } from "./State/FormState";
-import { Button } from "@mantine/core";
-import { useNavigate } from "react-router-dom";
+import NotoSansRegular from "../assets/fonts/NotoSansThai-Regular.ttf";
+import NotoSansBold from "../assets/fonts/NotoSansThai-Bold.ttf";
+import type { ItemDef, ItemKey, ReceiptData } from "../Props/Data";
 
+ 
 Font.register({
   family: "Sarabun",
   fonts: [
@@ -186,23 +182,11 @@ export const RentReceiptDoc: React.FC<{ data?: ReceiptData }> = ({
     accountNumber = "",
   } = data;
 
-  const meterCurr = [
-  "",
-  waterMeterCurr,
-  eletricMeterCurr,
-];
+  const meterCurr = ["", waterMeterCurr, eletricMeterCurr];
 
-const meterPrev = [
-  "",
-  waterMeterPrev,
-  eletricMeterPrev,
-];
+  const meterPrev = ["", waterMeterPrev, eletricMeterPrev];
 
-const meterUsed = [
-  "",
-  waterMeterUsed,
-  eletricMeterUsed,
-];
+  const meterUsed = ["", waterMeterUsed, eletricMeterUsed];
   const total = ITEMS.reduce((sum, item) => {
     const entry = items[item.key];
     return sum + (entry?.checked ? parseFloat(entry.amount || "0") : 0);
@@ -401,7 +385,7 @@ function exportToExcel(data: ReceiptData) {
     date = "",
     room = "",
     month = "",
-   waterMeterCurr = "",
+    waterMeterCurr = "",
     waterMeterPrev = "",
     waterMeterUsed = "",
     electricMeterCurr: eletricMeterCurr = "",
@@ -413,23 +397,11 @@ function exportToExcel(data: ReceiptData) {
     accountName = "",
     accountNumber = "",
   } = data;
-const meterCurr = [
-  "",
-  waterMeterCurr,
-  eletricMeterCurr,
-];
+  const meterCurr = ["", waterMeterCurr, eletricMeterCurr];
 
-const meterPrev = [
-  "",
-  waterMeterPrev,
-  eletricMeterPrev,
-];
+  const meterPrev = ["", waterMeterPrev, eletricMeterPrev];
 
-const meterUsed = [
-  "",
-  waterMeterUsed,
-  eletricMeterUsed,
-];
+  const meterUsed = ["", waterMeterUsed, eletricMeterUsed];
   const ITEMS_DEF = [
     { key: "rent", th: "ค่าเช่า / Rent" },
     { key: "water", th: "ค่าน้ำประปา / Water" },
@@ -498,13 +470,11 @@ const meterUsed = [
   XLSX.writeFile(wb, `rent-receipt-${room}-${month}.xlsx`);
 }
 
+interface PDFLoaderProps {
+  Data: ReceiptData;
+}
 
-
-export default function PDFLoader() {
-
-const Data = useFormStore((s)=>s.Form);
-const navigate = useNavigate();
-
+export default function PDFLoader({ Data }: PDFLoaderProps) {
   return (
     <div style={{ fontFamily: "sans-serif", padding: 16 }}>
       <h2 style={{ marginBottom: 12 }}>ใบเสร็จรับเงินค่าเช่า — Preview</h2>
@@ -554,7 +524,6 @@ const navigate = useNavigate();
       >
         <RentReceiptDoc data={Data} />
       </PDFViewer>
-      <Button onClick={()=>navigate("/")}>Back</Button>
     </div>
   );
 }

@@ -1,28 +1,11 @@
 
 
-
-
-export interface ItemEntry {
-  checked: boolean;
-  amount: string;
-}
-
- 
-
-export type ItemKey = "rent" | "water" | "electric" | "internet" | "fee" | "other";
-
-export interface ItemDef {
-  key: ItemKey;
-  th: string;
-  en: string;
-}
-
 export interface ReceiptData {
-  id?:number;
+  id?: number;
   name?: string;
   address?: string;
   tel?: string;
-  dateRealFormat?:string;
+  dateRealFormat?: string;
   date?: string;
   room?: string;
   month?: string;
@@ -32,13 +15,17 @@ export interface ReceiptData {
   electricMeterCurr?: string;
   electricMeterPrev?: string;
   electricMeterUsed?: string;
-  items?: Partial<Record<ItemKey, ItemEntry>>;
-  Receiver?: string;
+  rentChecked?: boolean;     rentAmount?: string;
+  waterChecked?: boolean;    waterAmount?: string;
+  electricChecked?: boolean; electricAmount?: string;
+  internetChecked?: boolean; internetAmount?: string;
+  feeChecked?: boolean;      feeAmount?: string;
+  otherChecked?: boolean;    otherAmount?: string;
+  receiver?: string;
   bankName?: string;
   accountName?: string;
   accountNumber?: string;
 }
-
 export const THAI_MONTHS_FULL = [
   "มกราคม",
   "กุมภาพันธ์",
@@ -54,3 +41,7 @@ export const THAI_MONTHS_FULL = [
   "ธันวาคม",
 ];
 
+export interface User {
+  id: string;
+  username: string;
+}

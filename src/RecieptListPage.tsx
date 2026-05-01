@@ -1,72 +1,152 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ReceiptCard } from "./Components/ReceiptCard";
-import { testData } from "./TestData";
-import type { ReceiptData } from "./Props/Data";
-import { useDisclosure } from "@mantine/hooks";
-import { Box, Button, Modal, Stack, Text } from "@mantine/core";
-import { FormModal } from "./Components/FormModal";
-import { useFormStore } from "./State/FormState";
 
+import type { ReceiptData } from "./Props/types";
+import { useDisclosure } from "@mantine/hooks";
+import {
+  ActionIcon,
+  AppShell,
+  AppShellHeader,
+  AppShellMain,
+  AppShellNavbar,
+  Box,
+  Burger,
+  Grid,
+  Group,
+  Modal,
+  Space,
+  Stack,
+  Text,
+} from "@mantine/core";
+import { FormModal } from "./Components/FormModal";
+import { useFormStore } from "./Store/FormStore";
+import { useFormListStore } from "./Store/FormListStore";
+import { api } from "./api/api";
+import { userStore } from "./Store/UserStore";
+import { useNavigate } from "react-router-dom";
+import { IconPlusFilled, IconLogout } from "@tabler/icons-react";
 export const ReceiptListPage = () => {
+  const navigate = useNavigate();
   const resetStoreData = useFormStore((s) => s.resetData);
   const [openedForm, { open: openForm, close: closeForm }] =
     useDisclosure(false);
-  const [data, setData] = useState<ReceiptData[]>(testData);
-  const handleAdd = (form: ReceiptData) => {
-    form.id = Date.now();
-    setData((prev) => [...prev, form]);
+ // const forms = useFormListStore((s) => s.forms);
+  const setForms = useFormListStore((s) => s.setForms);
+  const [data, setData] = useState<ReceiptData[]>([]);
+  const user = userStore((s) => s.user);
+  const clearUser = userStore((s) => s.clearUser);
+  const [mobileOpened, { toggle: toggleMobile }] = useDisclosure();
+  const [desktopOpened, { toggle: toggleDesktop }] = useDisclosure(false);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+  const fetchData = async () => {
+    const Receipts = await api.fetchReceipt(Number(user.id));
+    setData(Receipts);
+    setForms(Receipts);
+  };
+  const handleAdd = async (receipt: ReceiptData) => {
+    const addForm = await api.addReceipt(Number(user.id), receipt);
+    if (addForm) {
+      fetchData();
+    }
   };
 
-  const handleEdit = (form: ReceiptData) => {
-    if (data.findIndex((data: any) => data.id === form.id) === -1) {
-      return;
+  const handleEdit = async (receipt: ReceiptData) => {
+    const editForm = await api.editReceipt(Number(user.id), receipt);
+    if (editForm) {
+      fetchData();
     }
-    setData((prev) =>
-      prev.map((v: any) => (v.id === form.id ? { ...v, ...form } : v)),
-    );
   };
 
-  const handleDelete = (id: number) => {
-    if (data.findIndex((data: any) => data.id === id) === -1) {
-      return;
+  const handleDelete = async (receiptId: number) => {
+    const del = await api.deleteReceipt(Number(user.id), receiptId);
+    if (del) {
+      fetchData();
     }
-    setData((prev) => prev.filter((v) => v.id !== id));
+  };
+
+  const handleLogOut = () => {
+    clearUser();
+    navigate("/");
   };
   return (
-    <div>
+    <AppShell
+      padding="md"
+      header={{ height: 60 }}
+      navbar={{
+        width: 200,
+        breakpoint: "sm",
+        collapsed: { mobile: !mobileOpened, desktop: !desktopOpened },
+      }}
+    >
       <Modal opened={openedForm} onClose={closeForm}>
         <FormModal onClose={closeForm} handleSave={handleAdd}></FormModal>
-      </Modal>
-      <Box mx={"auto"} maw={700}>
-        {" "}
-        <Stack justify="center" gap="md">
+      </Modal>{" "}
+      <AppShellHeader>
+        <Group h="100%" px="md">
+          <Burger
+            opened={mobileOpened}
+            onClick={toggleMobile}
+            hiddenFrom="sm"
+            size="sm"
+          />
+          <Burger
+            opened={desktopOpened}
+            onClick={toggleDesktop}
+            visibleFrom="sm"
+            size="sm"
+          />
           <Text size="xl" mx={"auto"}>
             Receipt
           </Text>
-          {data.map((a: any) => (
-            <ReceiptCard
-              key={a.id}
-              payment={a}
-              handleEdit={handleEdit}
-              handleDelete={handleDelete}
-            ></ReceiptCard>
-          ))}
+        </Group>
+      </AppShellHeader>
+      <AppShellMain>
+        <Box mx={"auto"} maw={700}>
+          <Stack justify="center" gap="md">
+            {data.map((a: any) => (
+              <ReceiptCard
+                key={a.id}
+                payment={a}
+                handleEdit={handleEdit}
+                handleDelete={handleDelete}
+              ></ReceiptCard>
+            ))}
+          </Stack>
+        </Box>{" "}
+        <ActionIcon
+          style={{
+            position: "fixed",
+            bottom: 24,
+            right: 24,
+            zIndex: 100,
+          }}
+          onClick={() => {
+            resetStoreData();
+            openForm();
+          }}
+          size={"xl"}
+          radius={"xl"}
+        >
+          <IconPlusFilled   />
+        </ActionIcon>
+      </AppShellMain>
+      <AppShellNavbar>
+        <Stack align="center" gap="md" h="100%">
+          <Box mt="auto">
+            <Grid>
+              <Text>Username : {user.username}</Text>
+
+              <ActionIcon onClick={handleLogOut}>
+                <IconLogout />
+              </ActionIcon>
+            </Grid>{" "}
+            <Space h="md"></Space>
+          </Box>
         </Stack>
-      </Box>{" "}
-      <Button
-        style={{
-          position: "fixed",
-          bottom: 24,
-          right: 24,
-          zIndex: 100,
-        }}
-        onClick={() => {
-          resetStoreData();
-          openForm();
-        }}
-      >
-        add
-      </Button>
-    </div>
+      </AppShellNavbar>
+    </AppShell>
   );
 };

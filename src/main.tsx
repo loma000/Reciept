@@ -8,10 +8,11 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { MantineProvider } from "@mantine/core";
 
 import { ReceiptListPage } from "./RecieptListPage.tsx";
+import { LoginPage } from "./LogInPage.tsx";
 
 const router = createBrowserRouter([
-  { path: "/", element: <ReceiptListPage /> }
-,
+  { path: "/", element: <LoginPage /> },
+  { path: "/ReceiptList", element: <ReceiptListPage /> },
 ]);
 
 createRoot(document.getElementById("root")!).render(

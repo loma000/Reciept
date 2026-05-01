@@ -9,7 +9,7 @@ import {
   Text,
   Tooltip,
 } from "@mantine/core";
-import type { ReceiptData } from "../Props/Data";
+import type { ReceiptData } from "../Props/types";
 import { useState } from "react";
 import {
   IconPrinter,
@@ -20,7 +20,7 @@ import {
 import { useDisclosure } from "@mantine/hooks";
 import { FormModal } from "./FormModal";
 import PDFLoader from "./PDFLoaderPage";
-import { useFormStore } from "../State/FormState";
+import { useFormStore } from "../Store/FormStore";
  
 interface ReceiptCardProps {
   payment: ReceiptData;
